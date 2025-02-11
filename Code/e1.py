@@ -10,10 +10,12 @@ buracos=[]
 
 mI = MomentoDeInercia(retangulos, buracos)
 mI.exibirResultados()
-##mI.plotarfigura() Comentei apenas para fazer testes automatizados
+mI.plotarfigura() 
 
 ## teste 2 da proposta do exercicio
+'''
 mI2 = MomentoDeInercia()
 mI2.setRetangulos_user()
 mI2.exibirResultados()
 mI2.plotarfigura()
+'''
