@@ -1,7 +1,5 @@
 from Carregamento import Carregamento
-import matplotlib.pyplot as plt
 import sympy as sp
-import numpy as np
 import Confere as c
 
 class MomentoFletor():
@@ -120,4 +118,3 @@ class MomentoFletor():
         print(self.__mx_ajustado[2].subs(x,4.25))
         print(self.__mx_ajustado[3].subs(x,7.25))
 
-##creio que o problema é que o vx não ta sendo ajustado

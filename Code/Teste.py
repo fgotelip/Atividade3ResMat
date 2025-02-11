@@ -6,10 +6,9 @@ def main():
 
     M = MomentoFletor()
     M.set_carregamentos_teste(carregamentos)
-    M.set_esforcos()
     M.calcular_reacoes()
     M.set_esforcos()
-    M.getMax()
+    print(M.getMax())
     M.imprimir_pontos()
 
     
