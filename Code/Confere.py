@@ -15,7 +15,7 @@ def eh_numero_pos(valor,diferente_de_zero=False):
         return False
     
 def confere_coordenadas(entrada):
-    if not re.fullmatch(r"\s*(-?\d+(\.\d+)?)\s+(-?\d+(\.\d+)?)\s+(-?\d+(\.\d+)?)\s+(\d+(\.\d+)?)\s*",entrada):
+    if not re.fullmatch(r"\s*(-?\d+(\.\d+)?)\s+(-?\d+(\.\d+)?)\s+(-?\d+(\.\d+)?)\s+(-?\d+(\.\d+)?)\s*",entrada):
         print("As coordenadas digitadas não estão no formato correto.")
         return False
     return True

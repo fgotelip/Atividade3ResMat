@@ -15,7 +15,7 @@ class MomentoFletor():
             for carregamento in carregamentos:
                 self.aux_set_carregamentos(carregamento)
 
-    def aux_set_carregamentos(self,carregamento):
+    def __aux_set_carregamentos(self,carregamento):
         self.__carregamentos.append(carregamento)
         self.__forcasy.append(carregamento.get_resultante())
         self.__momentos.append(carregamento.get_resultante()*carregamento.get_posicao())
@@ -34,7 +34,7 @@ class MomentoFletor():
         for i in range(num_carregamentos):
             carregamento = Carregamento()
             px2 = carregamento.parser(i+1,px2)
-            self.aux_set_carregamentos(carregamento)
+            self.__aux_set_carregamentos(carregamento)
            
 
     def __calcular_reacoes(self):
@@ -91,7 +91,7 @@ class MomentoFletor():
                 pontos_y.append(float(funcao_ajustada.subs(x,ponto)))
         
 
-    def getMax(self):
+    def getMomentoMax(self):
         self.__calcular_reacoes()
         self.__set_esforcos()
         pontos_y = []

@@ -14,6 +14,15 @@ class MomentoDeInercia:
         self.__Iyy = 0
         self.__Ixy = 0
 
+    def getYmin(self):
+        return self.__Yp - min([ret.getYi() for ret in self.__retangulos])
+    
+    def getYmax(self):
+        return max([ret.getYf() for ret in self.__retangulos]) - self.__Yp
+    
+    def getIxx(self):
+        return self.__Ixx
+
     def setRetangulos_user(self): ## função para ler as informações do problema
         numRetangulos = input("Digite o número de retângulos na figura: ")
         while not eh_numero_pos(numRetangulos):
@@ -83,6 +92,10 @@ class MomentoDeInercia:
                 self.__Ixx -= IxxLocal + area * dY**2 ## Subtrái o momento de inércia em X do buraco
                 self.__Iyy -= IyyLocal + area * dX**2 ## Subtrái o momento de inércia em Y do buraco
                 self.__Ixy -= IxyLocal + area * dX * dY ## Subtrái o produto de inércia do buraco
+
+    def calcula(self):
+        self.__calculaCentroide()
+        self.__calcularMomentoDeInercia()
 
     def exibirResultados(self): ## Função para exibir os resultados
         self.__Xp = 0

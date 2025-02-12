@@ -19,8 +19,12 @@ class Retangulo():
 
         self.__xp = self.__x * self.__area
         self.__yp = self.__y * self.__area
-       
 
+    def getYi(self):
+        return self.__yi
+
+    def getYf(self):
+        return self.__yf
 
     def getCentroide(self):
         return self.__area, self.__xp, self.__yp
