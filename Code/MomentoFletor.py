@@ -1,17 +1,19 @@
 from Carregamento import Carregamento
 import sympy as sp
-import Confere as c
+from Confere import eh_numero_pos
 
 class MomentoFletor():
-    def __init__(self):
+    def __init__(self,carregamentos=[]):
         self.__carregamentos = []
         self.__vxs = []
         self.__mxs = []
         self.__forcasy = []
         self.__momentos = []
-        self.__mx_ajustado = []
         self.__A = 0
         self.__B = 0
+        if carregamentos != []:
+            for carregamento in carregamentos:
+                self.aux_set_carregamentos(carregamento)
 
     def aux_set_carregamentos(self,carregamento):
         self.__carregamentos.append(carregamento)
@@ -23,7 +25,7 @@ class MomentoFletor():
 
     def set_carregamentos(self):
         num_carregamentos = input("Número de carregamentos= ")
-        while not c.eh_inteiro(num_carregamentos):
+        while not eh_numero_pos(num_carregamentos):
             num_carregamentos = input("Número de carregamentos= ")
         num_carregamentos = int(num_carregamentos)
 
@@ -35,7 +37,7 @@ class MomentoFletor():
             self.aux_set_carregamentos(carregamento)
            
 
-    def calcular_reacoes(self):
+    def __calcular_reacoes(self):
         by = -sum(self.__momentos)/self.__carregamentos[-1].get_x2()
         self.__B = round(by,2)
         self.__forcasy.append(self.__B)
@@ -44,14 +46,8 @@ class MomentoFletor():
         ay -= sum(self.__forcasy)
         self.__A = round(ay,2)
 
-    
-    #para teste
-    def set_carregamentos_teste(self,carregamentos):
-        for carregamento in carregamentos:
-            self.aux_set_carregamentos(carregamento)
-
     #atividade 2
-    def set_esforcos(self):
+    def __set_esforcos(self):
         for i in range(len(self.__carregamentos)):
             if i == 0:
                 vant = self.__A
@@ -66,17 +62,8 @@ class MomentoFletor():
                 v,m = self.__carregamentos[i].gerar_esforco(vant,mant,self.__carregamentos[i-1].get_x1())
                 self.__vxs.append(v)
                 self.__mxs.append(m)
-        
 
-    def ajustar(self,i,funcao):
-        x = sp.symbols('x')
-        if i == 0:
-            ajuste = 0
-        else:
-            ajuste = self.__carregamentos[i-1].get_x2()
-        return funcao[i].subs(x,x-ajuste)
-
-    def aux_getMax(self,i,funcao,pontos_y,mx_ajustado):
+    def __aux_getMax(self,i,funcao,pontos_y,mx_ajustado):
         x = sp.symbols('x')
         if i == 0:
             p0y = funcao[i].subs(x,0)
@@ -105,16 +92,10 @@ class MomentoFletor():
         
 
     def getMax(self):
+        self.__calcular_reacoes()
+        self.__set_esforcos()
         pontos_y = []
+        mx_ajustado = []
         for i in range(len(self.__carregamentos)):
-            self.aux_getMax(i,self.__mxs,pontos_y,self.__mx_ajustado)
+            self.__aux_getMax(i,self.__mxs,pontos_y,mx_ajustado)
         return max(pontos_y)
-    
-    def imprimir_pontos(self):
-        x = sp.symbols('x')
-        print(self.__mx_ajustado[0].subs(x,0))
-        print(self.__mx_ajustado[0].subs(x,1.25))
-        print(self.__mx_ajustado[1].subs(x,3.25))
-        print(self.__mx_ajustado[2].subs(x,4.25))
-        print(self.__mx_ajustado[3].subs(x,7.25))
-

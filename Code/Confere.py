@@ -1,24 +1,17 @@
 import re
-def eh_numero_pos(valor):
+def eh_numero_pos(valor,diferente_de_zero=False):
     try:
-        float(valor)
-        if float(valor) <= 0:
+        valor = float(valor)
+        if diferente_de_zero:
+            if valor < 0:
+                print("O valor digitado não é um número positivo.")
+                return False
+        elif valor <= 0:
             print("O valor digitado não é um número positivo diferente de 0.")
             return False
         return True
     except ValueError:
         print("O valor digitado não é um número.")
-        return False
-
-def eh_inteiro(valor):
-    try:
-        int(valor)
-        if int(valor) <= 0:
-            print("O valor digitado não é número positivo diferente de 0.")
-            return False
-        return True
-    except ValueError:
-        print("O valor digitado não é um número")
         return False
     
 def confere_coordenadas(entrada):

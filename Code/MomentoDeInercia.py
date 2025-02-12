@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import Confere as c
+from Confere import eh_numero_pos, eh_sim_nao, confere_coordenadas
 import re
 from Retangulo import Retangulo
 
@@ -15,13 +16,13 @@ class MomentoDeInercia:
 
     def setRetangulos_user(self): ## função para ler as informações do problema
         numRetangulos = input("Digite o número de retângulos na figura: ")
-        while not c.eh_inteiro(numRetangulos):
+        while not eh_numero_pos(numRetangulos):
             numRetangulos = input("Digite o número de retângulos na figura: ")
         numRetangulos = int(numRetangulos)
 
         for i in range(numRetangulos):  ## Loop para inserir coordenadas dos retângulos cheios
             entrada = input(f"Digite as coordenadas do retângulo {i+1} (X-inicial, X-final, Y-inicial, Y-final): ")
-            while not c.confere_coordenadas(entrada):
+            while not confere_coordenadas(entrada):
                 entrada = input(f"Digite as coordenadas do retângulo {i+1} (X-inicial, X-final, Y-inicial, Y-final): ")
             numeros = re.findall(r"-?\d+(?:\.\d+)?", entrada)
             xi, xf, yi, yf = map(float, numeros)
@@ -29,12 +30,12 @@ class MomentoDeInercia:
             self.__retangulos.append(retangulo)
 
         figOca = input("Existe algum buraco na estrutura? (s/n): ")
-        while not c.eh_sim_nao(figOca):
+        while not eh_sim_nao(figOca):
             figOca = input("Existe algum buraco na estrutura?")
         if figOca.lower() == 's':
             print("oca")
             numBuracos = input("Digite o número de buracos na figura: ")
-            while not c.eh_inteiro(numBuracos):
+            while not eh_numero_pos(numBuracos):
                 numBuracos = input("Digite o número de buracos na figura: ")
             numBuracos = int(numBuracos)
 

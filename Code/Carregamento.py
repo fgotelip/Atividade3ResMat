@@ -1,6 +1,5 @@
 from Esforcos import gera_esforcos
-import Confere as c
-import sympy as sp
+from Confere import eh_numero_pos
 
 class Carregamento():
     def __init__(self, x1=0, x2=0, carga1=0, carga2=0):
@@ -62,18 +61,18 @@ class Carregamento():
         x1 = px2
 
         tam = input("Tamanho da barra = ")
-        while not c.eh_inteiro(tam):
+        while not eh_numero_pos(tam):
             tam = input("Tamanho da barra =  ")
         tam = float(tam)
         x2=x1+tam
 
         carga1 = input("Carga 1 = ")
-        while not c.eh_numero_pos(carga1):
+        while not eh_numero_pos(carga1,True):
             carga1 = input("Carga 1 =   ")
         carga1 = float(carga1)
 
         carga2 = input("Carga 2 =  ")
-        while not c.eh_numero_pos(carga2):
+        while not eh_numero_pos(carga2,True):
             carga2 = input("Carga 2 =  ")
         carga2 = float(carga2)
 
