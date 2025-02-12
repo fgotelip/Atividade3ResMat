@@ -4,8 +4,8 @@ class Tensao():
     def __init__(self,retangulos=[],buracos=[],carregamentos=[]):
         self.__momentoInercia = MomentoDeInercia(retangulos,buracos)
         self.__momentoFletor = MomentoFletor(carregamentos)
-        self.__TensaoMax = 0
-        self.__TensaoMin = 0
+        self.__TracaoMax = 0
+        self.__CompressaoMax = 0
         if retangulos != [] and carregamentos != []:
             self.calcula_tensoes()
             
@@ -13,11 +13,17 @@ class Tensao():
         self.__momentoInercia.calcula()
         y_max = self.__momentoInercia.getYmax()
         y_min = self.__momentoInercia.getYmin()
+        y_max_m = y_max*10**-3
+        y_min_m = y_min*10**-3
 
         MomentoMax = self.__momentoFletor.getMomentoMax()
 
-        self.__TensaoMax = MomentoMax * y_max / self.__momentoInercia.getIxx()
-        self.__TensaoMin = MomentoMax * y_min / self.__momentoInercia.getIxx()
+        Ixx_m4 = self.__momentoInercia.getIxx()*10**-12
+        
+        TracaoMax_Pa = MomentoMax * y_max_m / Ixx_m4
+        CompressaoMax_Pa = MomentoMax * y_min_m / Ixx_m4
+        self.__TracaoMax = TracaoMax_Pa*10**-6
+        self.__CompressaoMax = -CompressaoMax_Pa*10**-6
 
     def set_figura(self):
         print("Defina a área de seção transversal.")
@@ -29,6 +35,6 @@ class Tensao():
         self.calcula_tensoes()
 
     def exibe_resultados(self):
-        print(f"Tensão máxima: {self.__TensaoMax}")
-        print(f"Tensão mínima: {self.__TensaoMin}")
+        print(f"Tensão máxima: {self.__TracaoMax:.2f}MPa")
+        print(f"Tensão mínima: {self.__CompressaoMax:.2f}MPa")
         

@@ -13,7 +13,7 @@ class MomentoFletor():
         self.__B = 0
         if carregamentos != []:
             for carregamento in carregamentos:
-                self.aux_set_carregamentos(carregamento)
+                self.__aux_set_carregamentos(carregamento)
 
     def __aux_set_carregamentos(self,carregamento):
         self.__carregamentos.append(carregamento)

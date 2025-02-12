@@ -1,15 +1,20 @@
 from Carregamento import Carregamento
-from MomentoFletor import MomentoFletor
 from Retangulo import Retangulo
+from Tensao import Tensao
 
-
-carregamentos = [ Carregamento(0, 1.25, 100, 100),Carregamento(1.25, 3.25, 20, 500), Carregamento(3.25, 4.25, 120, 0),Carregamento(4.25, 7.25, 100, 10) ]
-retangulos=[Retangulo(0,48,0,6),Retangulo(20,28,6,54),Retangulo(12,36,54,60)]
+'''
+carregamentos = [ Carregamento(0,6,5000,5000)]
+retangulos=[Retangulo(0,250,0,20),Retangulo(115,135,20,320),Retangulo(0,250,320,340)]
 buracos=[]
 
-M = MomentoFletor(carregamentos)
-print(M.getMomentoMax)
-    
-M2 = MomentoFletor()
-M2.set_carregamentos()
-print(M2.getMomentoMax)    
+tensao = Tensao(retangulos,buracos,carregamentos)
+tensao.exibe_resultados()
+'''
+
+carregamentos = [ Carregamento(0,3,10,5000)]
+retangulos=[Retangulo(0,250,0,20),Retangulo(115,135,20,320),Retangulo(0,250,320,340)]
+buracos=[]
+
+tensao = Tensao(retangulos,buracos,carregamentos)
+tensao.exibe_resultados()
+
