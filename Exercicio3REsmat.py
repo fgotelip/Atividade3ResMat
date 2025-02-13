@@ -29,6 +29,7 @@ def calcularTorcaoETensao(n, elementos):
 
             print(f"A: {J1,J2}")
             # Cálculo da tensão máxima de cisalhamento para cada parte
+            print(f"oi{TTotal}")
             tauMax1 = (TTotal * RExt) / J1
             tauMax2 = (TTotal * RExt) / J2
 
@@ -57,6 +58,7 @@ def calcularTorcaoETensao(n, elementos):
             J = (np.pi / 2) * RExt**4
             print(J)
             # Cálculo da tensão máxima de cisalhamento
+            print(f"oi{TTotal}")
             tauMax = (TTotal * RExt) / J
 
             # Cálculo do ângulo de torção
@@ -75,7 +77,7 @@ def calcularTorcaoETensao(n, elementos):
         torcaoTotal += anguloTotal
 
     return resultados, torcaoTotal
-
+'''
 # Entrada de dados pelo usuário
 n = int(input("Digite o número de elementos no eixo: "))
 elementos = []
@@ -97,11 +99,11 @@ for i in range(n):
         OD = float(input("  Diâmetro (m): "))
         G = float(input("  Módulo de elasticidade transversal (Pa): "))
         T = float(input("  Torque aplicado (N.m): "))
-        elementos.append({"L": L, "OD": OD, "G": G, "T": T, "oca": False})
-"""n=2
+        elementos.append({"L": L, "OD": OD, "G": G, "T": T, "oca": False})'''
+n=2
 elementos=[]
 elementos.append({"L": 0.8, "OD": 0.06, "ID1": 0.044, "ID2": 0, "L1": 0.6, "G": 77e9, "T": 2000, "oca": True})
-elementos.append({"L": 0.4, "OD": 0.03, "G": 77e9, "T": 250, "oca": False})"""
+elementos.append({"L": 0.4, "OD": 0.03, "G": 77e9, "T": 250, "oca": False})
 
 # Executando os cálculos
 resultados, torcaoTotal = calcularTorcaoETensao(n, elementos)

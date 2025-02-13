@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 class Retangulo():
-    def __init__(self,xi=0,xf=0,yi=0,yf=0):
+    def __init__(self,xi,xf,yi,yf):
         self.__xi = xi
         self.__xf = xf
         self.__yi = yi

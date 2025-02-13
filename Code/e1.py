@@ -10,7 +10,7 @@ buracos=[]
 
 mI = MomentoDeInercia(retangulos, buracos)
 mI.exibirResultados()
-mI.plotarfigura() 
+mI.plotarfigura()
 
 ## teste 2 da proposta do exercicio
 '''
