@@ -58,7 +58,7 @@ class Torcao():
                 while not eh_numero_pos(T):
                     T = input("  Torque aplicado (N.m): ")
                 T = float(T)
-                self.__elementos.append(n,Elemento(L,OD,G,T,oca,ID1,ID2,L1))
+                self.__elementos.append(Elemento(L,OD,G,T,oca,ID1,ID2,L1))
                 
             else: ## Caso seja uma figura cheia
                 ## Leitura das informações para figuras cheias
@@ -76,7 +76,7 @@ class Torcao():
                 while not eh_numero_pos(T):
                     T = input("  Torque aplicado (N.m): ")
                 T = float(T)
-                self.__elementos.append(n,Elemento(L,OD,G,T))
+                self.__elementos.append(Elemento(L,OD,G,T))
 
         
     def __calculaTorcao_Tensao(self): ## Função para calcular o torque e a tensão máxima de cada elemento
