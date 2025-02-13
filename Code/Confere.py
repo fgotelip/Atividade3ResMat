@@ -1,8 +1,8 @@
 import re
-def eh_numero_pos(valor,diferente_de_zero=False):
+def eh_numero_pos(valor,igual_a_zero=False):
     try:
         valor = float(valor)
-        if diferente_de_zero:
+        if igual_a_zero:
             if valor < 0:
                 print("O valor digitado não é um número positivo.")
                 return False

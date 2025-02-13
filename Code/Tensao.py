@@ -35,6 +35,6 @@ class Tensao():
         self.calcula_tensoes()
 
     def exibe_resultados(self):
-        print(f"Tensão máxima: {self.__TracaoMax:.2f}MPa")
-        print(f"Tensão mínima: {self.__CompressaoMax:.2f}MPa")
+        print(f"Tração máxima: {self.__TracaoMax:.2f}MPa")
+        print(f"Compressão mínima: {self.__CompressaoMax:.2f}MPa")
         
