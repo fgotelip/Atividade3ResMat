@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 class MomentoFletor():
-    def __init__(self,carregamentos=[],comprimento=0,opcao=0):
+    def __init__(self,carregamentos=[],opcao=0,comprimento=0):
         self.__opcao = opcao
         self.__comprimento = comprimento
         self.__carregamentos = []
@@ -25,6 +25,9 @@ class MomentoFletor():
         elif self.__opcao == 3:
             self.__carregamentos = carregamentos
             self.calcularReacoesPontual()
+
+    def get_opcao(self):
+        return self.__opcao
 
     def __aux_set_carregamentos(self,carregamento):
         self.__carregamentos.append(carregamento)
@@ -121,7 +124,7 @@ class MomentoFletor():
         self.__A = solucoes[a]
         self.__B = solucoes[b]
 
-    def __calcular_reacoes_carregamento(self):
+    def __calcularReacoesCarregamento(self):
         by = -sum(self.__momentos)/self.__carregamentos[-1].get_x2()
         self.__B = round(by,2)
         self.__forcasy.append(self.__B)
@@ -147,7 +150,7 @@ class MomentoFletor():
                 self.__vxs.append(v)
                 self.__mxs.append(m)
 
-    def __aux_getMax(self,i,funcao,pontos_y,mx_ajustado):
+    def __aux_getMax_carregamento(self,i,funcao,pontos_y,mx_ajustado):
         x = sp.symbols('x')
         if i == 0:
             p0y = funcao[i].subs(x,0)
@@ -174,7 +177,7 @@ class MomentoFletor():
             if concavidade < 0:
                 pontos_y.append(float(funcao_ajustada.subs(x,ponto)))
 
-    def plotarMomentoFletor(self): ## Função para plotar o diagrama de momento fletor
+    def getMomentoMax_Funcao_Pontual(self): ## Função para plotar o diagrama de momento fletor
         x = sp.symbols('x')
         pontos = np.linspace(0, self.__comprimento, 10000) ## Vetor de pontos para plotagem
         self.__mxs = np.zeros_like(pontos) ## Vetor de momentos
@@ -193,9 +196,7 @@ class MomentoFletor():
                 for i, xi in enumerate(pontos):
                     if xi >= posicao:
                         self.__mxs[i] -= intensidade * (xi - posicao)
-
-        self.__mxs -= self.__mxs[-1] * (pontos / self.__comprimento) ## Pequeno ajuste de aproximações numéricas (garante que o momento no final da viga é zero)
-
+        '''
         ## Configurações gerais do gráfico
         plt.plot(pontos, self.__mxs, label='Momento Fletor')
         plt.xlabel('comprimento da viga (m)')
@@ -206,12 +207,22 @@ class MomentoFletor():
         plt.grid(True)
         plt.legend()
         plt.show()
+        '''
+        
+        return max(self.__mxs)
 
-    def getMomentoMax(self):
-        self.__calcular_reacoes_carregamento()
+    def getMomentoMax_carregamento(self):
+        self.__calcularReacoesCarregamento()
         self.__set_esforcos()
         pontos_y = []
         mx_ajustado = []
         for i in range(len(self.__carregamentos)):
-            self.__aux_getMax(i,self.__mxs,pontos_y,mx_ajustado)
+            self.__aux_getMax_carregamento(i,self.__mxs,pontos_y,mx_ajustado)
         return max(pontos_y)
+    
+    def getMomentoMax(self):
+        if self.__opcao == 1:
+            return self.getMomentoMax_carregamento()
+        else:
+            return self.getMomentoMax_Funcao_Pontual()
+
