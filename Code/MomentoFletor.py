@@ -6,8 +6,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 class MomentoFletor():
-    def __init__(self,carregamentos=[]):
-        self.__opcao = 0
+    def __init__(self,carregamentos=[],comprimento=0,opcao=0):
+        self.__opcao = opcao
+        self.__comprimento = comprimento
         self.__carregamentos = []
         self.__vxs = []
         self.__mxs = []
@@ -15,9 +16,15 @@ class MomentoFletor():
         self.__momentos = []
         self.__A = 0
         self.__B = 0
-        if carregamentos != []:
+        if self.__opcao == 1:
             for carregamento in carregamentos:
                 self.__aux_set_carregamentos(carregamento)
+        elif self.__opcao == 2:
+            self.__carregamentos = sp.sympify(carregamentos)
+            self.calcularReacoesFuncao()
+        elif self.__opcao == 3:
+            self.__carregamentos = carregamentos
+            self.calcularReacoesPontual()
 
     def __aux_set_carregamentos(self,carregamento):
         self.__carregamentos.append(carregamento)
@@ -47,24 +54,24 @@ class MomentoFletor():
                 self.__aux_set_carregamentos(carregamento)
 
         elif self.__opcao == 2:
-            comprimento = input("Digite o comprimento da viga (m): ")
-            while not eh_numero_pos(comprimento):
-                comprimento = input("Digite o comprimento da viga (m): ")
-            comprimento = float(comprimento)
+            self.__comprimento = input("Digite o comprimento da viga (m): ")
+            while not eh_numero_pos(self.__comprimento):
+                self.__comprimento = input("Digite o comprimento da viga (m): ")
+            self.__comprimento = float(self.__comprimento)
 
             funcao = input("Insira a função de distribuição (Ex: 100 + 10*x): ")
             while not eh_funcao(funcao):
                 funcao = input("Insira a função de distribuição (Ex: 100 + 10*x): ")
             funcaoSimpy = sp.sympify(funcao)
 
-            self.__carregamentos.append(funcaoSimpy)
-            self.calcularReacoesFuncao(comprimento, funcaoSimpy)
+            self.__carregamentos = funcaoSimpy
+            self.calcularReacoesFuncao()
 
         else: ## Carga pontual
-            comprimento = input("Digite o comprimento da viga (m): ")
-            while not eh_numero_pos(comprimento):
-                comprimento = input("Digite o comprimento da viga (m): ")
-            comprimento = float(comprimento)
+            self.__comprimento = input("Digite o comprimento da viga (m): ")
+            while not eh_numero_pos(self.__comprimento):
+                self.__comprimento = input("Digite o comprimento da viga (m): ")
+            self.__comprimento = float(self.__comprimento)
 
             numForcas = input("Digite o número de forças atuando na viga: ")
             while not eh_numero_pos(numForcas):
@@ -82,32 +89,32 @@ class MomentoFletor():
                     intensidade = input("Digite a intensidade da carga (N): ")
                 intensidade = float(intensidade)
 
-                self.__carregamentos.append({'posicao': posicao, 'intensidade': intensidade})
-            self.calcularReacoesPontual(comprimento)
+                self.__carregamentos.append((posicao,intensidade))
+            self.calcularReacoesPontual()
            
-    def calcularReacoesFuncao(self,comprimento, funcao): ## Função para calcular as reações de apoio carregamentos dados por funções
+    def calcularReacoesFuncao(self): ## Função para calcular as reações de apoio carregamentos dados por funções
         RA, RB = sp.symbols('RA RB')
         x = sp.symbols('x')
-        carga = sp.lambdify(x, funcao, 'numpy') ## Função de distribuição de carga
-        forca, _ = quad(carga, 0, comprimento) ## Calcula a força total aplicada na viga
-        momento, _ = quad(lambda x: carga(x) * x, 0, comprimento) ## Calcula o momento total aplicado na viga
+        carga = sp.lambdify(x, self.__carregamentos, 'numpy') ## Função de distribuição de carga
+        forca, _ = quad(carga, 0, self.__comprimento) ## Calcula a força total aplicada na viga
+        momento, _ = quad(lambda x: carga(x) * x, 0, self.__comprimento) ## Calcula o momento total aplicado na viga
         posicao = momento / forca ## Calcula a posição da força resultante
-        RB = (forca * posicao) / comprimento ## Calcula a reação em B
+        RB = (forca * posicao) / self.__comprimento ## Calcula a reação em B
         RA = forca - RB ## Calcula a reação em A
 
         self.__A = RA
         self.__B = RB
 
-    def calcularReacoesPontual(self,comprimento): ## Função para calcular as reações de apoio para cargas pontuais
+    def calcularReacoesPontual(self): ## Função para calcular as reações de apoio para cargas pontuais
         a, b = sp.symbols('RA RB')
         somaForcas = 0
         momentos = 0
         for carregamento in self.__carregamentos: ## Loop para percorrer as forças
-            posicao = carregamento['posicao']
-            intensidade = carregamento['intensidade']
+            posicao = carregamento[0]
+            intensidade = carregamento[1]
             somaForcas += intensidade ## Adiciona as forças
             momentos += intensidade * posicao ## Adiciona os momentos
-        momentos -= b * comprimento
+        momentos -= b * self.__comprimento
         equacoes = [a + b - somaForcas, momentos]
         solucoes = sp.solve(equacoes, [a, b]) ## Resolve as equações para encontrar as reações de apoio
 
@@ -167,32 +174,31 @@ class MomentoFletor():
             if concavidade < 0:
                 pontos_y.append(float(funcao_ajustada.subs(x,ponto)))
 
-    def plotarMomentoFletor(self,comprimento): ## Função para plotar o diagrama de momento fletor
+    def plotarMomentoFletor(self): ## Função para plotar o diagrama de momento fletor
         x = sp.symbols('x')
-        pontos = np.linspace(0, comprimento, 10000) ## Vetor de pontos para plotagem
+        pontos = np.linspace(0, self.__comprimento, 10000) ## Vetor de pontos para plotagem
         self.__mxs = np.zeros_like(pontos) ## Vetor de momentos
 
         RA = float(self.__A)
         self.__mxs += RA * pontos
 
         if self.__opcao == 2: ## Função
-            for carga in self.__carregamentos:
-                funcMomento = sp.integrate(x,sp.integrate(x,carga)) ## Integra duas vezes a função de distribuição para obter a função do momento
-                self.__mxs -= sp.lambdify(x, funcMomento, 'numpy')(pontos)
+            funcMomento = sp.integrate((sp.integrate(self.__carregamentos,x)),x) ## Integra duas vezes a função de distribuição para obter a função do momento
+            self.__mxs -= sp.lambdify(x, funcMomento, 'numpy')(pontos)
 
         elif self.__opcao == 3: ## Carga pontual
             for forca in self.__carregamentos:
-                posicao = forca['posicao']
-                intensidade = forca['intensidade']
+                posicao = forca[0]
+                intensidade = forca[1]
                 for i, xi in enumerate(pontos):
                     if xi >= posicao:
                         self.__mxs[i] -= intensidade * (xi - posicao)
 
-        self.__mxs -= self.__mxs[-1] * (pontos / comprimento) ## Pequeno ajuste de aproximações numéricas (garante que o momento no final da viga é zero)
+        self.__mxs -= self.__mxs[-1] * (pontos / self.__comprimento) ## Pequeno ajuste de aproximações numéricas (garante que o momento no final da viga é zero)
 
         ## Configurações gerais do gráfico
         plt.plot(pontos, self.__mxs, label='Momento Fletor')
-        plt.xlabel('Comprimento da viga (m)')
+        plt.xlabel('comprimento da viga (m)')
         plt.ylabel('Momento fletor (N.m)')
         plt.title('Diagrama de Momento Fletor')
         plt.axhline(0, color='black', linewidth=0.8, linestyle='--')
