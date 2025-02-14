@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import Confere as c
-from Confere import eh_numero_pos, eh_sim_nao, confere_coordenadas
+from Confere import eh_numero, eh_sim_nao, confere_coordenadas
 import re
 from Retangulo import Retangulo
 
@@ -25,7 +25,7 @@ class MomentoDeInercia:
 
     def setRetangulos_user(self): ## função para ler as informações do problema
         numRetangulos = input("Digite o número de retângulos na figura: ")
-        while not eh_numero_pos(numRetangulos):
+        while not eh_numero(numRetangulos):
             numRetangulos = input("Digite o número de retângulos na figura: ")
         numRetangulos = int(numRetangulos)
 
@@ -44,7 +44,7 @@ class MomentoDeInercia:
         if figOca.lower() == 's':
             print("oca")
             numBuracos = input("Digite o número de buracos na figura: ")
-            while not eh_numero_pos(numBuracos):
+            while not eh_numero(numBuracos):
                 numBuracos = input("Digite o número de buracos na figura: ")
             numBuracos = int(numBuracos)
 

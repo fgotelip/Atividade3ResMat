@@ -1,4 +1,3 @@
-from Confere import eh_numero_pos, eh_sim_nao
 import numpy as np
 
 ## Classe para instanciar elementos e calcular suas informações

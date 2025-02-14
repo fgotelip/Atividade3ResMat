@@ -1,6 +1,6 @@
 from Carregamento import Carregamento
 import sympy as sp
-from Confere import eh_numero_pos,eh_123,eh_funcao
+from Confere import eh_numero,eh_123,eh_funcao
 from scipy.integrate import quad
 import numpy as np
 import matplotlib.pyplot as plt
@@ -42,7 +42,7 @@ class MomentoFletor():
 
         if self.__opcao == 1:
             num_carregamentos = input("Número de carregamentos= ")
-            while not eh_numero_pos(num_carregamentos):
+            while not eh_numero(num_carregamentos):
                 num_carregamentos = input("Número de carregamentos= ")
             num_carregamentos = int(num_carregamentos)
 
@@ -55,7 +55,7 @@ class MomentoFletor():
 
         elif self.__opcao == 2:
             self.__comprimento = input("Digite o comprimento da viga (m): ")
-            while not eh_numero_pos(self.__comprimento):
+            while not eh_numero(self.__comprimento):
                 self.__comprimento = input("Digite o comprimento da viga (m): ")
             self.__comprimento = float(self.__comprimento)
 
@@ -69,23 +69,23 @@ class MomentoFletor():
 
         else: ## Carga pontual
             self.__comprimento = input("Digite o comprimento da viga (m): ")
-            while not eh_numero_pos(self.__comprimento):
+            while not eh_numero(self.__comprimento):
                 self.__comprimento = input("Digite o comprimento da viga (m): ")
             self.__comprimento = float(self.__comprimento)
 
             numForcas = input("Digite o número de forças atuando na viga: ")
-            while not eh_numero_pos(numForcas):
+            while not eh_numero(numForcas):
                 numForcas = input("Digite o número de forças atuando na viga: ")
             numForcas = int(numForcas)
 
             for i in range(numForcas):
                 posicao = input("Digite a posição da carga (m): ")
-                while not eh_numero_pos(posicao,True):
+                while not eh_numero(posicao,True):
                     posicao = input("Digite a posição da carga (m): ")
                 posicao = float(posicao)
             
                 intensidade = input("Digite a intensidade da carga (N): ")
-                while not eh_numero_pos(intensidade):
+                while not eh_numero(intensidade):
                     intensidade = input("Digite a intensidade da carga (N): ")
                 intensidade = float(intensidade)
 

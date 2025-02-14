@@ -1,12 +1,16 @@
 import re
 import sympy as sp
 ## Funções para garantir que as inserções do usuário estão corretas
-def eh_numero_pos(valor,igual_a_zero=False): ## Função para verificar se um número é maior que 0
+def eh_numero(valor,igual_a_zero=False,menor_que_zero=False): ## Função para verificar se um número é maior que 0
     try:
         valor = float(valor)
         if igual_a_zero:
             if valor < 0: ## Caso o número seja negativo
                 print("O valor digitado não é um número positivo.")
+                return False
+        elif menor_que_zero: ## Caso o número seja zero
+            if valor == 0:
+                print("O valor digitado não é um número diferente de 0.")
                 return False
         elif valor <= 0: ## Caso o número seja zero ou negativo
             print("O valor digitado não é um número positivo diferente de 0.")

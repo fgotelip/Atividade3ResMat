@@ -1,4 +1,4 @@
-from Confere import eh_numero_pos,eh_sim_nao
+from Confere import eh_numero,eh_sim_nao
 from Elemento import Elemento
 
 ## Classe para executar os cálculos previstos para o exercício 3
@@ -11,14 +11,14 @@ class Torcao():
 
     def set_elementos(self): ## Função para inserir os elementos
         n = input("Digite o número de elementos no eixo: ")
-        while not eh_numero_pos(n): ## Verifica se a entrada é valida
+        while not eh_numero(n): ## Verifica se a entrada é valida
             n = input("Digite o número de elementos no eixo: ")
         self.__n = int(n) 
 
         for i in range(self.__n): ## Loop para inserir os elementos
             print(f"\nDigite os dados do elemento {i+1}:")
             L = input("  Comprimento total (m): ")
-            while not eh_numero_pos(L):
+            while not eh_numero(L):
                 L = input("  Comprimento total (m): ")
             L = float(L)
 
@@ -30,32 +30,32 @@ class Torcao():
             if oca: ## Caso seja oco
                 ## Leitura das informações para figuras ocas
                 OD = input("  Diâmetro externo (m): ")
-                while not eh_numero_pos(OD):
+                while not eh_numero(OD):
                     OD = input("  Diâmetro externo (m): ")
                 OD = float(OD)
 
                 ID1 = input("  Diâmetro interno da parte inicial (m) (0 se for cheio): ")
-                while not eh_numero_pos(ID1,True):
+                while not eh_numero(ID1,True):
                     ID1 = input("  Diâmetro interno da parte inicial (m) (0 se for cheio): ")
                 ID1 = float(ID1)
 
                 ID2 = input("  Diâmetro interno da parte final (m) (0 se for cheio): ")
-                while not eh_numero_pos(ID2,True):
+                while not eh_numero(ID2,True):
                     ID2 = input("  Diâmetro interno da parte final (m) (0 se for cheio): ")
                 ID2 = float(ID2)
 
                 L1 = input("  Comprimento da parte oca (m): ")
-                while not eh_numero_pos(L1):
+                while not eh_numero(L1):
                     L1 = input("  Comprimento da parte oca (m): ")
                 L1 = float(L1)
 
                 G = input("  Módulo de elasticidade transversal (Pa): ")
-                while not eh_numero_pos(G):
+                while not eh_numero(G):
                     G = input("  Módulo de elasticidade transversal (Pa): ")
                 G = float(G)
 
                 T = input("  Torque aplicado (N.m): ")
-                while not eh_numero_pos(T,True):
+                while not eh_numero(T,False,True):
                     T = input("  Torque aplicado (N.m): ")
                 T = float(T)
                 self.__elementos.append(Elemento(L,OD,G,T,oca,ID1,ID2,L1))
@@ -63,17 +63,17 @@ class Torcao():
             else: ## Caso seja uma figura cheia
                 ## Leitura das informações para figuras cheias
                 OD = input("  Diâmetro (m): ")
-                while not eh_numero_pos(OD):
+                while not eh_numero(OD):
                     OD = input("  Diâmetro (m): ")
                 OD = float(OD)
 
                 G = input("  Módulo de elasticidade transversal (Pa): ")
-                while not eh_numero_pos(G):
+                while not eh_numero(G):
                     G = input("  Módulo de elasticidade transversal (Pa): ")
                 G = float(G)
 
                 T = input("  Torque aplicado (N.m): ")
-                while not eh_numero_pos(T,True):
+                while not eh_numero(T,False,True):
                     T = input("  Torque aplicado (N.m): ")
                 T = float(T)
                 self.__elementos.append(Elemento(L,OD,G,T))
