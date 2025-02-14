@@ -55,7 +55,7 @@ class Torcao():
                 G = float(G)
 
                 T = input("  Torque aplicado (N.m): ")
-                while not eh_numero_pos(T):
+                while not eh_numero_pos(T,True):
                     T = input("  Torque aplicado (N.m): ")
                 T = float(T)
                 self.__elementos.append(Elemento(L,OD,G,T,oca,ID1,ID2,L1))
@@ -73,7 +73,7 @@ class Torcao():
                 G = float(G)
 
                 T = input("  Torque aplicado (N.m): ")
-                while not eh_numero_pos(T):
+                while not eh_numero_pos(T,True):
                     T = input("  Torque aplicado (N.m): ")
                 T = float(T)
                 self.__elementos.append(Elemento(L,OD,G,T))
