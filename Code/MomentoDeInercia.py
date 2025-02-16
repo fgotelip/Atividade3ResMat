@@ -99,10 +99,10 @@ class MomentoDeInercia:
 
     def exibirResultados(self): ## Função para exibir os resultados
         self.calcula()
-        print(f"O centroide da figura é: ({self.__Xp:.2f},{self.__Yp:.2f})mm")
-        print(f"Momento de inércia em relação ao eixo X: {self.__Ixx:.2f} mm⁴")
-        print(f"Momento de inércia em relação ao eixo Y: {self.__Iyy:.2f} mm⁴")
-        print(f"Produto de inércia Ixy: {self.__Ixy:.2f} mm⁴\n")
+        print(f"O centroide da figura é: ({self.__Xp:.4f},{self.__Yp:.4f})mm")
+        print(f"Momento de inércia em relação ao eixo X: {self.__Ixx:.4e} mm⁴")
+        print(f"Momento de inércia em relação ao eixo Y: {self.__Iyy:.4e} mm⁴")
+        print(f"Produto de inércia Ixy: {self.__Ixy:.4e} mm⁴\n")
 
     def plotarfigura(self): ## Função para plotar o problema
         fig, ax = plt.subplots()

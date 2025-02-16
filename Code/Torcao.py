@@ -110,10 +110,10 @@ class Torcao():
         for resultado in self.__resultados: ## Loop para exibir os resultados
             print(f"\nElemento {resultado['Elemento']}:")
             if "Tensão Máxima Parte 1 (Pa)" in resultado: ## Caso seja uma figura oca
-                print(f"  Tensão Máxima na Parte 1: {resultado['Tensão Máxima Parte 1 (Pa)']:.2f} Pa")
-                print(f"  Tensão Máxima na Parte 2: {resultado['Tensão Máxima Parte 2 (Pa)']:.2f} Pa")
+                print(f"  Tensão Máxima na Parte 1: {resultado['Tensão Máxima Parte 1 (Pa)']:.6e} Pa")
+                print(f"  Tensão Máxima na Parte 2: {resultado['Tensão Máxima Parte 2 (Pa)']:.6e} Pa")
             else: ## Caso seja uma figura cheia
-                print(f"  Tensão Máxima: {resultado['Tensão Máxima (Pa)']:.2f} Pa")
+                print(f"  Tensão Máxima: {resultado['Tensão Máxima (Pa)']:.6e} Pa")
             print(f"  Ângulo de Torção Total: {resultado['Ângulo de Torção Total (rad)']:.6f} rad")
 
         print(f"\nÂngulo de Torção Total do Eixo: {self.__torcaoTotal:.6f} rad")
