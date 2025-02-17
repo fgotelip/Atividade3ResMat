@@ -14,7 +14,6 @@ class MomentoFletor():
         if carregamentos != []:
             for carregamento in carregamentos:
                 self.__aux_set_carregamentos(carregamento)
-            self.__calcularReacoes()
 
     def __aux_set_carregamentos(self,carregamento):
         self.__carregamentos.append(carregamento)
@@ -93,22 +92,36 @@ class MomentoFletor():
         ay -= sum(self.__forcasy)
         self.__A = round(ay,2)
 
+    def __append_esforcos(self,i):
+        self.__vxs.append(self.__carregamentos[i].get_v())
+        self.__mxs.append(self.__carregamentos[i].get_m())
+        self.__idiagramas+=1
+        if self.__carregamentos[i].get_tipo() == 2:
+            self.__vxs.append(self.__carregamentos[i].get_v2())
+            self.__mxs.append(self.__carregamentos[i].get_m2())
+            self.__idiagramas+=1
+
 
     def __set_esforcos(self):
+        self.__idiagramas = -1
         for i in range(len(self.__carregamentos)):
             if i == 0:
                 vant = self.__A
                 mant = 0
                 self.__carregamentos[i].geraEsforcos(vant,mant)
-                self.__vxs.append(self.__carregamentos[i].get_v)
-                self.__mxs.append(self.__carregamentos[i].get_m)
+                self.__append_esforcos(i)
             else:
-                vant = self.__vxs[i-1]
-                mant = self.__mxs[i-1]
+                vant = self.__vxs[self.__idiagramas]
+                mant = self.__mxs[self.__idiagramas]
+
+                if self.__carregamentos[i-1].get_tipo() == 1:
+                    self.__carregamentos[i].geraEsforcos(vant,mant,self.__carregamentos[i-1].get_x1())
+
+                elif self.__carregamentos[i-1].get_tipo() == 2:
+                    self.__carregamentos[i].geraEsforcos(vant,mant,self.__carregamentos[i-1].get_posicao())
                 
-                self.__carregamentos[i].geraEsforcos(vant,mant,self.__carregamentos[i-1].get_x1())
-                self.__vxs.append(self.__carregamentos[i].get_v)
-                self.__mxs.append(self.__carregamentos[i].get_m)
+
+                self.__append_esforcos(i)
 
     def __aux_getMax(self,i,funcao,pontos_y,mx_ajustado):
         x = sp.symbols('x')
