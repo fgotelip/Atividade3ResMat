@@ -62,30 +62,28 @@ class Carregamento():
             self.__resultante = -self.__carga
 
         elif self.__tipo == 3:
-            self.__w = sp.lambdify(self.__x, self.__carga, 'numpy') ## Função de distribuição de carga
+            self.__w = sp.sympify(self.__carga)
             
-            forca, _ = quad(self.__w, 0, self.__tam) ## Calcula a força total aplicada na viga
-            self.__resultante = -forca
-            momento, _ = quad(lambda x: self.__w(x) * x, 0, self.__tam) ## Calcula o momento total aplicado na viga
-            posicao = momento / forca ## Calcula a posição da força resultante
+            forca = sp.integrate(self.__w,(self.__x,0,self.__tam)) ## Calcula a força total aplicada na viga
+            self.__resultante = -float(forca)
+            momento = sp.integrate(self.__w * self.__x,(self.__x, 0, self.__tam))
+            posicao = float(momento / forca) ## Calcula a posição da força resultante
             self.__posicao = self.__x1 + posicao
 
     def geraEsforcos(self,vant,mant,xant=0):
         tamAnt = self.__x1 - xant
         self.__gera_vx(vant,tamAnt)
         self.__gera_mx(mant,tamAnt)
-        print(f"M = {self.__m}")
-        if self.__m2 != 0:
-            print(f"M2 = {self.__m2}")
     
     def __gera_vx(self,vant,tamAnt):
         if isinstance(vant,sp.Basic):
             vant = vant.subs(self.__x,tamAnt)
-        if self.__tipo == 1:
-            self.__v = sp.integrate(-self.__w,self.__x) + vant
-        elif self.__tipo == 2: 
+   
+        if self.__tipo == 2: 
             self.__v = vant
             self.__v2 = vant + self.__resultante  
+        else:
+            self.__v = sp.integrate(-self.__w,self.__x) + vant
 
     def __gera_mx(self,mant,tamAnt):
         if isinstance(mant,sp.Basic):
@@ -95,6 +93,27 @@ class Carregamento():
         if self.__tipo == 2:
             mant2 = self.__m.subs(self.__x,self.__pos)
             self.__m2 = sp.integrate(self.__v2,self.__x) + mant2
+
+    def getMomentoMax(self,MomentoMax):
+        if self.__tipo == 2:
+            self.setPontoMaxMomento(self.__m,MomentoMax,self.__pos)
+            self.setPontoMaxMomento(self.__m2,MomentoMax,self.__tam - self.__pos)
+        else:
+            self.setPontoMaxMomento(self.__m,MomentoMax,self.__tam)
+
+        
+          
+
+    def setPontoMaxMomento(self,funcao,MomentoMax,tam):
+        df = sp.diff(funcao,self.__x)
+        df2 = sp.diff(df,self.__x)
+
+        pontos_criticos = sp.solveset(df,self.__x,domain=sp.Interval(0,tam))
+
+        for ponto in pontos_criticos:
+            concavidade = df2.subs(self.__x,ponto)
+            if concavidade < 0:
+                MomentoMax.append(float(self.__m.subs(self.__x,ponto)))    
 
     def get_tipo(self):
         return self.__tipo

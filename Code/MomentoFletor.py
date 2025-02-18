@@ -114,48 +114,19 @@ class MomentoFletor():
                 vant = self.__vxs[self.__idiagramas]
                 mant = self.__mxs[self.__idiagramas]
 
-                if self.__carregamentos[i-1].get_tipo() == 1:
-                    self.__carregamentos[i].geraEsforcos(vant,mant,self.__carregamentos[i-1].get_x1())
-
-                elif self.__carregamentos[i-1].get_tipo() == 2:
+                if self.__carregamentos[i-1].get_tipo() == 2:
                     self.__carregamentos[i].geraEsforcos(vant,mant,self.__carregamentos[i-1].get_posicao())
+                else:
+                    self.__carregamentos[i].geraEsforcos(vant,mant,self.__carregamentos[i-1].get_x1())
                 
 
                 self.__append_esforcos(i)
 
-    def __aux_getMax(self,i,funcao,pontos_y,mx_ajustado):
-        x = sp.symbols('x')
-        if i == 0:
-            p0y = funcao[i].subs(x,0)
-            pontos_y.append(float(p0y))
-            ajuste = 0
-        else:
-            ajuste = self.__carregamentos[i-1].get_x2()
-
-        funcao_ajustada = funcao[i].subs(x,x-ajuste)
-        mx_ajustado.append(funcao_ajustada)
-
-        px = self.__carregamentos[i].get_x2()
-        py = funcao_ajustada.subs(x,px)
-        pontos_y.append(float(py))
-
-        df = sp.diff(funcao_ajustada,x)
-        df2 = sp.diff(df,x)
-
-        xmax = self.__carregamentos[i].get_x2() - self.__carregamentos[i].get_x1()
-        pontos_criticos = sp.solveset(df,x,domain=sp.Interval(ajuste,xmax+ajuste))
-
-        for ponto in pontos_criticos:
-            concavidade = df2.subs(x,ponto)
-            if concavidade < 0:
-                pontos_y.append(float(funcao_ajustada.subs(x,ponto)))
-
     def getMomentoMax(self):
         self.__calcularReacoes()
         self.__set_esforcos()
-        pontos_y = []
-        mx_ajustado = []
-        for i in range(len(self.__carregamentos)):
-            self.__aux_getMax(i,self.__mxs,pontos_y,mx_ajustado)
-        return max(pontos_y)
+        MomentoMax = []
+        for carregamento in self.__carregamentos:
+            carregamento.getMomentoMax(MomentoMax)
+        return MomentoMax[0]
 

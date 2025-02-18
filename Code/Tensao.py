@@ -37,5 +37,5 @@ class Tensao():
 
     def exibe_resultados(self):
         print(f"Tração máxima: {self.__TracaoMax:.2f}MPa")
-        print(f"Compressão mínima: {self.__CompressaoMax:.2f}MPa")
+        print(f"Compressão máxima: {self.__CompressaoMax:.2f}MPa")
         
