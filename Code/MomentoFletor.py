@@ -99,9 +99,9 @@ class MomentoFletor(): ## Construtor da classe
             x2=x1+tam ## Final da barra inserida
             x2Ant = x2
 
-            opcao = input("Como é dada a distribuição de cargas?\n1-Carga Distribuída\n2-Carga Pontual\n3-Função: ") ## Diferentes tipos de carregamento
-            while not eh_opcao(opcao,123):
-                opcao = input("Como é dada a distribuição de cargas?\n1-Carga Distribuída\n2-Carga Pontual\n3-Função: ")
+            opcao = input("Como é dada a distribuição de cargas?\n1-Carga Distribuída\n2-Carga Pontual\n3-Função\nCarga Momento: ") ## Diferentes tipos de carregamento
+            while not eh_opcao(opcao,1234):
+                opcao = input("Como é dada a distribuição de cargas?\n1-Carga Distribuída\n2-Carga Pontual\n3-Função\nCarga Momento: ")
             self.__opcao = int(opcao)
 
             if self.__opcao == 1: ## Carregamento distribuido
@@ -136,6 +136,20 @@ class MomentoFletor(): ## Construtor da classe
                     funcao = input("Insira a função de distribuição (Ex: 100 + 10*x): ")
                
                 self.__aux_set_carregamentos(Carregamento(x1,x2,funcao,self.__opcao))
+            
+            elif self.__opcao == 4: ## Carga Momento
+                carga = input("Carga Momento = ")
+                while not eh_numero(carga):
+                    carga = input("Carga Momento =  ")
+                carga = float(carga)
+
+                if tam != 0:
+                    pos = input("Posição do momento = ")
+                    while not esta_no_intervalo(pos,x1,x2):
+                        pos = input("Posição do momento =  ")
+                else: ## Momento entre carregamentos
+                    pos = 0 
+                self.__aux_set_carregamentos(Carregamento(x1,x2,carga,self.__opcao,0,pos))
 
             if tipo_viga == 2: ## Define os apoios da viga em balanço
                 self.__define_apoios(x2,"depois")
