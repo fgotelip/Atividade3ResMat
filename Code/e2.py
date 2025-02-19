@@ -11,7 +11,7 @@ buracos1=[]
 tensao1 = Tensao(retangulos1,buracos1,carregamentos1)
 tensao1.exibe_resultados()'''
 
-
+## Execução principal do exercício 3
 
 #T3
 carregamentos = [ Carregamento(0,1.5,100,1,100),Carregamento(1.5,3,10,2,0,1.5),Carregamento(3,3.75,"133.3333*x",3),Carregamento(3.75,4,30,2,0,0),Carregamento(4,5,100,1,10),Carregamento(5,6,30,2,0,0.75)]
