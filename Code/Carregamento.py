@@ -1,5 +1,4 @@
 import sympy as sp
-from scipy.integrate import quad
 
 class Carregamento():
     def __init__(self, x1=0, x2=0,carga=0,tipo=0,carga2=0,pos=0):

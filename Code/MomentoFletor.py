@@ -23,6 +23,7 @@ class MomentoFletor():
 
     def __aux_set_carregamentos(self,carregamento):
         dist = carregamento.get_posicao() - self.__apoios[0].get_pos()
+        
         self.__carregamentos.append(carregamento)
         self.__forcasy.append(carregamento.get_resultante())
         self.__momentos.append(carregamento.get_resultante()*dist)
