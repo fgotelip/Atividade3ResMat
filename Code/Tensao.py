@@ -1,9 +1,9 @@
 from MomentoDeInercia import MomentoDeInercia
 from MomentoFletor import MomentoFletor
 class Tensao():
-    def __init__(self,retangulos=[],buracos=[],carregamentos=[]):
+    def __init__(self,retangulos=[],buracos=[],carregamentos=[],apoios=[]):
         self.__momentoInercia = MomentoDeInercia(retangulos,buracos)
-        self.__momentoFletor = MomentoFletor(carregamentos)
+        self.__momentoFletor = MomentoFletor(carregamentos,apoios)
         self.__TracaoMax = 0
         self.__CompressaoMax = 0
         if retangulos != [] and carregamentos != []:
@@ -17,14 +17,14 @@ class Tensao():
         y_min_m = y_min*10**-3
 
         MomentoMax = self.__momentoFletor.getMomentoMax()
-        print(f"Momento Máximo: {MomentoMax:.2f}N.m")
+        print(f"Momento Máximo: {MomentoMax:}N.m")
 
         Ixx_m4 = self.__momentoInercia.getIxx()*10**-12
         
         TracaoMax_Pa = MomentoMax * y_max_m / Ixx_m4
         CompressaoMax_Pa = MomentoMax * y_min_m / Ixx_m4
-        self.__TracaoMax = TracaoMax_Pa*10**-6
-        self.__CompressaoMax = -CompressaoMax_Pa*10**-6
+        self.__TracaoMax = -TracaoMax_Pa*10**-6
+        self.__CompressaoMax = CompressaoMax_Pa*10**-6
 
     def set_figura(self):
         print("Defina a área de seção transversal.")

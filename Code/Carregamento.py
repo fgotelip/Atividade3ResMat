@@ -74,6 +74,9 @@ class Carregamento():
         tamAnt = self.__x1 - xant
         self.__gera_vx(vant,tamAnt)
         self.__gera_mx(mant,tamAnt)
+        print(f"m1 ={self.__m}")
+        if self.__tipo == 2:
+            print(f"m2 ={self.__m2}")
     
     def __gera_vx(self,vant,tamAnt):
         if isinstance(vant,sp.Basic):
@@ -95,11 +98,17 @@ class Carregamento():
             self.__m2 = sp.integrate(self.__v2,self.__x) + mant2
 
     def getMomentoMax(self,MomentoMax):
-        if self.__tipo == 2:
-            self.setPontoMaxMomento(self.__m,MomentoMax,self.__pos)
-            self.setPontoMaxMomento(self.__m2,MomentoMax,self.__tam - self.__pos)
-        else:
-            self.setPontoMaxMomento(self.__m,MomentoMax,self.__tam)
+        if isinstance(self.__m,sp.Basic):
+            if self.__tipo == 2:
+                MomentoMax.append(float(self.__m.subs(self.__x,0)))
+                self.setPontoMaxMomento(self.__m,MomentoMax,self.__pos)
+                MomentoMax.append(float(self.__m.subs(self.__x,self.__pos)))
+                self.setPontoMaxMomento(self.__m2,MomentoMax,self.__tam - self.__pos)
+                MomentoMax.append(float(self.__m2.subs(self.__x,self.__tam - self.__pos)))
+            else:
+                MomentoMax.append(float(self.__m.subs(self.__x,0)))
+                self.setPontoMaxMomento(self.__m,MomentoMax,self.__tam)
+                MomentoMax.append(float(self.__m.subs(self.__x,self.__tam)))
 
         
           
@@ -110,10 +119,12 @@ class Carregamento():
 
         pontos_criticos = sp.solveset(df,self.__x,domain=sp.Interval(0,tam))
 
-        for ponto in pontos_criticos:
-            concavidade = df2.subs(self.__x,ponto)
-            if concavidade < 0:
-                MomentoMax.append(float(self.__m.subs(self.__x,ponto)))    
+        if not isinstance(pontos_criticos,sp.Interval):
+            for ponto in pontos_criticos:
+                concavidade = df2.subs(self.__x,ponto)
+                if concavidade < 0 or concavidade > 0:
+                    print(f"X momento máximo = {ponto}")
+                    MomentoMax.append(float(self.__m.subs(self.__x,ponto)))    
 
     def get_tipo(self):
         return self.__tipo
