@@ -15,6 +15,7 @@ class Carregamento():
         self.__posicao2 = 0
         self.__resultante = 0
         self.__resultante2 = 0
+        self.__momento = 0
         self.__w = 0
         self.__v = 0
         self.__v2 = 0
@@ -70,14 +71,14 @@ class Carregamento():
         
         elif self.__tipo == 4: ## Carga momento
             self.__posicao = self.__x1+pos ## Posição do momento
-            self.__m = self.__carga
+            self.__momento = -self.__carga ## Valor do momento
 
     def geraEsforcos(self,vant,mant,xant=0): ## Função para gerar os esforços na barra
         tamAnt = self.__x1 - xant 
         self.__gera_vx(vant,tamAnt) ## Chama para o calculo do cortante 
         self.__gera_mx(mant,tamAnt) ## Chama para o calculo do fletor
         print(f"m1 ={self.__m}")
-        if self.__tipo == 2:
+        if self.__tipo == 2 or self.__tipo == 4:
             print(f"m2 ={self.__m2}")
     
     def __gera_vx(self,vant,tamAnt): ## Função para calcular o cortante
@@ -85,9 +86,11 @@ class Carregamento():
         if isinstance(vant,sp.Basic): ## Confere se é função
             vant = vant.subs(self.__x,tamAnt) ## Cortante anterior
 
-        if self.__tipo == 2: ## Carregamento pontual
+        if self.__tipo == 2 or self.__tipo == 4: ## Carregamento pontual
             self.__v = vant
-            self.__v2 = vant + self.__resultante  
+            if self.__tipo == 2:
+                self.__v2 = vant + self.__resultante  
+
         else: ## Carregamento distribuído e f(X)
             self.__v = sp.integrate(-self.__w,self.__x) + vant
 
@@ -100,9 +103,14 @@ class Carregamento():
             mant2 = self.__m.subs(self.__x,self.__pos)
             self.__m2 = sp.integrate(self.__v2,self.__x) + mant2
 
+        elif self.__tipo == 4: ## Carga Momento
+            mant2 = self.__m.subs(self.__x,self.__pos)
+            termo_independente = self.__m.subs(self.__x,0) ## Termo independente da função
+            self.__m2 = self.__m.subs(termo_independente,mant2+self.__momento) ## Calcula o segundo fletor subtraindo o termo independente
+
     def getMomentoMax(self,MomentoMax): ## Funçãp para calcular o momento máximo
         if isinstance(self.__m,sp.Basic): ## Confere se é função 
-            if self.__tipo == 2: ## Carga pontual
+            if self.__tipo == 2 or self.__tipo == 4: ## Carga pontual e Carga Momento
                 MomentoMax.append(float(self.__m.subs(self.__x,0)))
                 self.setPontoMaxMomento(self.__m,MomentoMax,self.__pos)
                 MomentoMax.append(float(self.__m.subs(self.__x,self.__pos)))
@@ -114,7 +122,7 @@ class Carregamento():
                 MomentoMax.append(float(self.__m.subs(self.__x,self.__tam)))
         else: ## Função constante
             MomentoMax.append(self.__m)
-            if self.__tipo == 2:
+            if self.__tipo == 2 or self.__tipo == 4:
                 MomentoMax.append(self.__m2)        
 
     def setPontoMaxMomento(self,funcao,MomentoMax,tam): ## Função para definir a seção mais solicitada da viga
@@ -144,6 +152,9 @@ class Carregamento():
 
     def get_resultante2(self): ## Retornar a segunda resultante (Trapézios)
         return self.__resultante2
+    
+    def get_momento(self):
+        return -self.__momento
 
     def get_x1(self): ## Retorna o início do carregamento
         return self.__x1

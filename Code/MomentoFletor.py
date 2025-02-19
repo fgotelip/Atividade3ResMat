@@ -22,15 +22,20 @@ class MomentoFletor(): ## Construtor da classe
       
 
     def __aux_set_carregamentos(self,carregamento): ## Função auxiliar para definir carregamentos
-        dist = carregamento.get_posicao() - self.__apoios[0].get_pos() ## Distância do carregamento até o apoio 
-        self.__carregamentos.append(carregamento)
-        self.__forcasy.append(carregamento.get_resultante()) ## Soma a força gerada pelo carregamento
-        self.__momentos.append(carregamento.get_resultante()*dist) ## Soma o momento gerado pelo carregamento
-        
-        if carregamento.get_resultante2() != 0: ## Caso seja trapézio
-            dist2 = carregamento.get_posicao2() - self.__apoios[0].get_pos()
-            self.__forcasy.append(carregamento.get_resultante2())
-            self.__momentos.append(carregamento.get_resultante2()*dist2)
+        if carregamento.get_tipo() != 4: ## Caso não seja Carga Momento    
+            dist = carregamento.get_posicao() - self.__apoios[0].get_pos() ## Distância do carregamento até o apoio 
+            self.__carregamentos.append(carregamento)
+            self.__forcasy.append(carregamento.get_resultante()) ## Soma a força gerada pelo carregamento
+            self.__momentos.append(carregamento.get_resultante()*dist) ## Soma o momento gerado pelo carregamento
+            
+            if carregamento.get_resultante2() != 0: ## Caso seja trapézio
+                dist2 = carregamento.get_posicao2() - self.__apoios[0].get_pos()
+                self.__forcasy.append(carregamento.get_resultante2())
+                self.__momentos.append(carregamento.get_resultante2()*dist2)
+        else: ## Caso seja Carga Momento
+            self.__carregamentos.append(carregamento)
+            self.__momentos.append(carregamento.get_momento())
+
 
     def __define_apoios(self,pos,antes_depois): ## função para definir os apoios
         if self.__apoios[0] == 0 or self.__apoios[1] == 0:
@@ -155,15 +160,20 @@ class MomentoFletor(): ## Construtor da classe
     def __append_esforcos(self,i): ## Adicionar os esforços
         self.__vxs.append(self.__carregamentos[i].get_v()) ## Adiciona cortante
         self.__mxs.append(self.__carregamentos[i].get_m()) ## Adiciona fletor
-        self.__idiagramas+=1 
-        if self.__carregamentos[i].get_tipo() == 2: ## Carga pontual
-            self.__vxs.append(self.__carregamentos[i].get_v2())
+        self.__idCortante+=1 
+        self.__idFletor+=1 
+        if self.__carregamentos[i].get_tipo() == 2 or self.__carregamentos[i].get_tipo() == 4: ## Carga pontual ou Carga Momento
+            if self.__carregamentos[i].get_tipo() == 2:
+                self.__vxs.append(self.__carregamentos[i].get_v2())
+                self.__idCortante+=1
+
             self.__mxs.append(self.__carregamentos[i].get_m2())
-            self.__idiagramas+=1
+            self.__idFletor+=1
 
 
     def __set_esforcos(self): ## Define os esforços
-        self.__idiagramas = 0
+        self.__idCortante = 0
+        self.__idFletor = 0
         
         self.__vxs.append(0) 
         self.__mxs.append(0)
@@ -174,14 +184,14 @@ class MomentoFletor(): ## Construtor da classe
                 if apoio != 0: ## Verifica se o apoio foi definido
                     if self.__carregamentos[i].get_x1() == apoio.get_pos(): ## Verifica se o início do carregamento está no apoio
                         temApoio = True
-                        vant = self.__vxs[self.__idiagramas] + apoio.get_reacao() ## cortante antes do carregamento somado com a reação do apoio
-                        mant = self.__mxs[self.__idiagramas] - apoio.get_momento() ## Fletor antes do carregamento somado com o momento do apoio
+                        vant = self.__vxs[self.__idCortante] + apoio.get_reacao() ## cortante antes do carregamento somado com a reação do apoio
+                        mant = self.__mxs[self.__idFletor] - apoio.get_momento() ## Fletor antes do carregamento somado com o momento do apoio
 
             if not temApoio: ## Caso não tenha apoio
-                vant = self.__vxs[self.__idiagramas] ## cortante antes do carregamento
-                mant = self.__mxs[self.__idiagramas] ## Fletor antes do carregamento
+                vant = self.__vxs[self.__idCortante] ## cortante antes do carregamento
+                mant = self.__mxs[self.__idFletor] ## Fletor antes do carregamento
 
-            if self.__carregamentos[i-1].get_tipo() == 2: ## Carga pontual
+            if self.__carregamentos[i-1].get_tipo() == 2 or self.__carregamentos[i-1].get_tipo() == 4: ## Carga pontual ou Carga Momento
                 self.__carregamentos[i].geraEsforcos(vant,mant,self.__carregamentos[i-1].get_posicao())
             else: ## Carregamento distribuído e f(X)
                 self.__carregamentos[i].geraEsforcos(vant,mant,self.__carregamentos[i-1].get_x1())
