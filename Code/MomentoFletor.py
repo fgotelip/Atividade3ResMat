@@ -1,6 +1,5 @@
 from Carregamento import Carregamento
 from Apoio import Apoio
-import sympy as sp
 from Confere import eh_numero,eh_123,eh_funcao,esta_no_intervalo,eh_sim_nao
 
 class MomentoFletor():
@@ -149,8 +148,7 @@ class MomentoFletor():
         else:
             self.__apoios[0].set_momento(-sum(self.__momentos))
 
-        ay = 0
-        ay -= sum(self.__forcasy)
+        ay = -sum(self.__forcasy)
         self.__apoios[0].set_reacao(ay)
 
     def __append_esforcos(self,i):

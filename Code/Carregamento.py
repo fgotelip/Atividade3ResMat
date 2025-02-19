@@ -108,6 +108,10 @@ class Carregamento():
                 MomentoMax.append(float(self.__m.subs(self.__x,0)))
                 self.setPontoMaxMomento(self.__m,MomentoMax,self.__tam)
                 MomentoMax.append(float(self.__m.subs(self.__x,self.__tam)))
+        else:
+            MomentoMax.append(self.__m)
+            if self.__tipo == 2:
+                MomentoMax.append(self.__m2)
 
         
           

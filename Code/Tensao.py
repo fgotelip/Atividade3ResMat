@@ -2,11 +2,13 @@ from MomentoDeInercia import MomentoDeInercia
 from MomentoFletor import MomentoFletor
 class Tensao():
     def __init__(self,retangulos=[],buracos=[],carregamentos=[],apoios=[]):
-        self.__momentoInercia = MomentoDeInercia(retangulos,buracos)
-        self.__momentoFletor = MomentoFletor(carregamentos,apoios)
+        self.__momentoInercia = 0
+        self.__momentoFletor = 0
         self.__TracaoMax = 0
         self.__CompressaoMax = 0
         if retangulos != [] and carregamentos != []:
+            self.__momentoInercia = MomentoDeInercia(retangulos,buracos)
+            self.__momentoFletor = MomentoFletor(carregamentos,apoios)
             self.calcula_tensoes()
             
     def calcula_tensoes(self):
