@@ -28,13 +28,13 @@ class Carregamento():
 
                 self.__w = self.__carga ## Valor da carga
 
-            elif self.__carga == 0: ## Retângulo crescente
+            elif self.__carga == 0: ## Triângulo Retângulo crescente
                 self.__posicao = self.__x1+(self.__tam*2/3) ## Posição da força resultante
                 self.__resultante = -self.__tam*self.__carga2/2 ## Valor da força resultante
 
                 self.__w = (self.__carga2/self.__tam)*self.__x ## Valor da carga
 
-            elif self.__carga2 == 0: ## Retângulo decrescente
+            elif self.__carga2 == 0: ## Triângulo Retângulo decrescente
                 self.__posicao = self.__x1+(self.__tam*1/3) ## Posição da força resultante
                 self.__resultante = -self.__tam*self.__carga/2 ## Valor da força resultante
 

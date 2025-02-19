@@ -170,20 +170,20 @@ class MomentoFletor(): ## Construtor da classe
         
         for i in range(1,len(self.__carregamentos)): ## Loop para calcular os esforços por partes 
             temApoio = False
-            for apoio in self.__apoios:
-                if apoio != 0: ## Biapoiada simples ou com balanço
-                    if self.__carregamentos[i].get_x1() == apoio.get_pos():
+            for apoio in self.__apoios: ## Percorre os apoios
+                if apoio != 0: ## Verifica se o apoio foi definido
+                    if self.__carregamentos[i].get_x1() == apoio.get_pos(): ## Verifica se o início do carregamento está no apoio
                         temApoio = True
-                        vant = self.__vxs[self.__idiagramas] + apoio.get_reacao() ## cortante antes do carregamento
-                        mant = self.__mxs[self.__idiagramas] - apoio.get_momento() ## Fletor antes do carregamento
+                        vant = self.__vxs[self.__idiagramas] + apoio.get_reacao() ## cortante antes do carregamento somado com a reação do apoio
+                        mant = self.__mxs[self.__idiagramas] - apoio.get_momento() ## Fletor antes do carregamento somado com o momento do apoio
 
-            if not temApoio:
-                vant = self.__vxs[self.__idiagramas]
-                mant = self.__mxs[self.__idiagramas]
+            if not temApoio: ## Caso não tenha apoio
+                vant = self.__vxs[self.__idiagramas] ## cortante antes do carregamento
+                mant = self.__mxs[self.__idiagramas] ## Fletor antes do carregamento
 
             if self.__carregamentos[i-1].get_tipo() == 2: ## Carga pontual
                 self.__carregamentos[i].geraEsforcos(vant,mant,self.__carregamentos[i-1].get_posicao())
-            else:
+            else: ## Carregamento distribuído e f(X)
                 self.__carregamentos[i].geraEsforcos(vant,mant,self.__carregamentos[i-1].get_x1())
                 
 
@@ -194,6 +194,6 @@ class MomentoFletor(): ## Construtor da classe
         self.__set_esforcos()
         MomentoMax = []
         for carregamento in self.__carregamentos: ## Percorre o vetor de carregamentos
-            carregamento.getMomentoMax(MomentoMax)
-        return max(MomentoMax,key=abs)
+            carregamento.getMomentoMax(MomentoMax) ## Adiciona o momento máximo de cada carregamento
+        return max(MomentoMax,key=abs) ## Retorna o maior momento absoluto(positivo ou negativo)
 

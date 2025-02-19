@@ -16,7 +16,7 @@ class Tensao():
     def calcula_tensoes(self): ## Função para calcular as tensões na barra
         self.__momentoInercia.calcula() ## Calcula o momento de inércia da seção
         
-        ## Momento de inércia máximo e mínimo
+        ## coordenada Y máxima e mínima
         y_max = self.__momentoInercia.getYmax()
         y_min = self.__momentoInercia.getYmin()
         
@@ -27,7 +27,7 @@ class Tensao():
         MomentoMax = self.__momentoFletor.getMomentoMax() ## Momento fletor máximo
         print(f"Momento Máximo: {MomentoMax:}N.m")
 
-        Ixx_m4 = self.__momentoInercia.getIxx()*10**-12 ## Momento de inércia em metros^4
+        Ixx_m4 = self.__momentoInercia.getIxx()*10**-12 ## Momento de inércia x em metros^4
         
         ## Tração e compressão máximas
         TracaoMax_Pa = MomentoMax * y_max_m / Ixx_m4
