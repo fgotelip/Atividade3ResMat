@@ -32,16 +32,21 @@ def eh_sim_nao(valor): ## Função para verificar se o valor é um número
     print("Digite 's' ou 'n'.")
     return False
 
-def eh_123(valor,apenas12=False): ## Função para verificar se o valor está no intervalo 1 a 3
-    if apenas12:
+def eh_opcao(valor,intervalo): ## Função para verificar se o valor está no intervalo 1 a 3
+    if intervalo == 12:
         if valor in ['1','2']:
             return True
         print("Digite 1 ou 2.")
         return False
-    else:
+    elif intervalo == 123:
         if valor in ['1','2','3']:
             return True
         print("Digite 1, 2 ou 3.")
+        return False
+    elif intervalo == 1234:
+        if valor in ['1','2','3','4']:
+            return True
+        print("Digite 1, 2, 3 ou 4.")
         return False
 
 def eh_funcao(funcao): ## Função para verificar se a inserção é uma função válida

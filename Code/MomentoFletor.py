@@ -1,6 +1,6 @@
 from Carregamento import Carregamento
 from Apoio import Apoio
-from Confere import eh_numero,eh_123,eh_funcao,esta_no_intervalo,eh_sim_nao
+from Confere import eh_numero,eh_opcao,eh_funcao,esta_no_intervalo,eh_sim_nao
 
 ## Classe para ler os carregamentos e calcular informações básicas da viga
 class MomentoFletor(): ## Construtor da classe
@@ -42,7 +42,7 @@ class MomentoFletor(): ## Construtor da classe
                 
                 if self.__apoios[0] == 0 and self.__apoios[1] == 0: ## Caso nenhum apoio tenha sido iniciado
                     tipo = input("Escolha o tipo de apoio:\n1-2o Gênero\n2-1o Gênero")
-                    while not eh_123(tipo,True): ## Permite apenas entradas corretas
+                    while not eh_opcao(tipo,12): ## Permite apenas entradas corretas
                         tipo = input("Escolha o tipo de apoio:\n1-2o Gênero\n2-1o Gênero")
                     tipo = int(tipo)
                     if tipo == 1: ## Inicia um apoio de segundo gênero
@@ -61,7 +61,7 @@ class MomentoFletor(): ## Construtor da classe
     def set_carregamentos(self): ## Função para definir os carregamentos
         print("Escolha o tipo de viga:\n1-Biapoiada Simples\n2-Biapoiada com balanço\n3-Engastada Livre")
         tipo = input("Tipo de viga: ")
-        while not eh_123(tipo): ## Permite apenas entradas corretas
+        while not eh_opcao(tipo,123): ## Permite apenas entradas corretas
             tipo = input("Tipo de viga: ")
         tipo_viga = int(tipo)
 
@@ -95,7 +95,7 @@ class MomentoFletor(): ## Construtor da classe
             x2Ant = x2
 
             opcao = input("Como é dada a distribuição de cargas?\n1-Carga Distribuída\n2-Carga Pontual\n3-Função: ") ## Diferentes tipos de carregamento
-            while not eh_123(opcao):
+            while not eh_opcao(opcao,123):
                 opcao = input("Como é dada a distribuição de cargas?\n1-Carga Distribuída\n2-Carga Pontual\n3-Função: ")
             self.__opcao = int(opcao)
 

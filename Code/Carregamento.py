@@ -67,6 +67,10 @@ class Carregamento():
             momento = sp.integrate(self.__w * self.__x,(self.__x, 0, self.__tam)) ## Momento resultante
             posicao = float(momento / forca) ## Posição força resultante
             self.__posicao = self.__x1 + posicao ## Posição resultante em relação a viga toda
+        
+        elif self.__tipo == 4: ## Carga momento
+            self.__posicao = self.__x1+pos ## Posição do momento
+            self.__m = self.__carga
 
     def geraEsforcos(self,vant,mant,xant=0): ## Função para gerar os esforços na barra
         tamAnt = self.__x1 - xant 
